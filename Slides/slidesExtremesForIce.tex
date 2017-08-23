@@ -1,0 +1,695 @@
+\documentclass[dvipsnames]{beamer}
+%comes before \usetheme else the slide titles are cut off...
+\useoutertheme{infolines}
+\usetheme[height=7mm]{Boadilla}
+%\usecolortheme[RGB={70, 130, 138}]{structure}
+\usecolortheme[RGB={255, 140, 0}]{structure}
+\usepackage{psfrag}
+\usepackage{graphicx}
+\usepackage{multirow}
+\usepackage[hang]{subfigure}
+\usepackage{amsmath,mathtools}
+\usepackage{verbatim}
+\setbeamertemplate{itemize items}[ball]
+\setbeamertemplate{navigation symbols}{}
+
+\newcommand{\blue}{\textcolor{CornflowerBlue}}
+\newcommand{\green}{\textcolor{Green}}
+
+
+\renewcommand{\subfigcapskip}{8pt}
+\author[Emma Eastoe]{Emma Eastoe}
+\institute[Lancaster University]{Department of Mathematics and
+  Statistics \\  Lancaster University, UK}
+\title[Extremes@Lancaster]{Extreme Value Analysis}
+\date
+
+\titlegraphic{
+%\includegraphics[scale=0.3]{/home/eastoee/Research/AmberLeeson/MEMOG/Exeter/Plots/LUmathstatslogo.pdf}\hspace{2.75cm}
+\includegraphics[scale=0.3]{/home/eastoee/Research/AmberLeeson/MEMOG/Exeter/Plots/LUmathstatslogo.pdf}%\hspace{2.75cm}
+}
+
+\begin{document}
+
+\begin{frame}[plain,noframenumbering]
+\titlepage
+\end{frame}
+
+
+\begin{frame}[plain,noframenumbering]
+\tableofcontents
+\end{frame}
+
+
+\section{Introduction}
+\begin{frame}
+\frametitle{Introduction}
+
+\begin{itemize}
+\item
+Statistical models aimed at capturing behaviour of very largest, or very smallest, observations in a data set.
+\item
+Many applications in the environmental sciences: air pollution, hydrology, temperatures, wind speed, precipitation, wave heights,...
+\item
+Goal: estimate return levels or the probability of an unusually large (small) event.
+\end{itemize}
+
+\end{frame}
+
+
+\begin{frame}
+
+
+\begin{block}{Return levels}
+\begin{itemize}
+\item
+$N$-year return level, the value a process is expected to exceed, once every $N$ years. Where $N$ could be 50, 100, 500, ...
+\item
+If you are unlucky, this return level {\it could} be exceeded in two successive years even if $N$ is large.
+\end{itemize}
+\end{block}
+
+\begin{block}{Probability of a large event}
+To estimate the probability that a process exceeds $x$:
+\begin{itemize}
+\item
+If $x$ is `moderate' do this empirically: calculate the proportion of observations (data points) above $x$;
+\item
+If $x$ is high may have no observations above $x$ so empirical method doesn't work: use a model and extrapolate.
+\end{itemize}
+\end{block}
+
+\end{frame}
+
+\begin{frame}
+%\subsection{Greenland temperatures}
+\frametitle{Greenland temperatures}
+
+\begin{columns}[T]
+\begin{column}{0.5\textwidth}
+\vfill
+\begin{itemize}
+\item
+Greenland is mostly ice sheet
+\item
+Why worry about extremely high temperatures?
+\item
+Rising temperatures $\rightarrow$ \\
+more positive degree days $\rightarrow$ \\greater melting $\rightarrow$ \\increased global sea level
+\end{itemize}
+\vfill
+\end{column}
+\hfill
+\begin{column}{0.5\textwidth}
+Daily max temperatures, Kangerlussuaq (1975--2015)
+\begin{figure}
+\centering
+%{\includegraphics[scale=0.2]{/home/eastoee/Research/AmberLeeson/MEMOG/Exeter/Plots/topographic-map-of-greenland-max.jpg}}
+%{\includegraphics[scale=0.2]{/home/eastoee/Research/AmberLeeson/MEMOG/Exeter/Plots/GC-net-stations.pdf}}
+{\includegraphics[scale=0.3]{/home/eastoee/ShortCourses/GlaciologyExtremes/Plots/kanger_ts.pdf}}
+\end{figure}
+\end{column}
+\end{columns}
+\end{frame}
+
+\section{Maxima and minima}
+
+\begin{frame}
+\frametitle{Annual maxima and minima}
+
+The simplest way to characterise an extreme event is to look at the annual maxima/minima. We may ask:
+
+
+\begin{itemize}
+\item
+What is the largest maxima (smallest minima) that we might expect to see
+\begin{itemize}
+\item
+In 10-years?
+\item
+In 100-years?
+\item
+Ever?
+\end{itemize}
+\item
+What is the chance that the annual maximum exceeds a certain high and previously unobserved value?
+\item
+Is the behaviour of the annual minima/maxima changing over time?
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{Kangerlussuaq}
+
+\begin{columns}[T]
+\begin{column}{0.5\textwidth}
+\vfill
+Annual maxima
+\begin{figure}
+\centering
+{\includegraphics[scale=0.3]{/home/eastoee/ShortCourses/GlaciologyExtremes/Plots/kangerAnnMax.pdf}}
+\end{figure}
+\vfill
+\end{column}
+\hfill
+\begin{column}{0.5\textwidth}
+Annual minima
+\begin{figure}
+\centering
+{\includegraphics[scale=0.3]{/home/eastoee/ShortCourses/GlaciologyExtremes/Plots/kangerAnnMin.pdf}}
+\end{figure}
+\end{column}
+\end{columns}
+\end{frame}
+
+\subsection{The generalised extreme value (GEV) distribution}
+\begin{frame}
+\frametitle{Models for maxima and minima}
+\begin{itemize}
+\item
+Generalised extreme value distribution
+\item
+Defined by it's cumulative distribution function. Let $X$ represent an annual maximum (minimum) then
+\begin{eqnarray*}
+G(x)=\Pr[X\leq x]=\exp\left\{-\left[1+\xi\left(\frac{x-\mu}{\sigma}\right)\right]^{-1/\xi}\right\}
+\end{eqnarray*}
+\item
+Three parameters (unknowns): location $\mu$, scale $\sigma\in(0,\infty)$ and shape $\xi$
+\item
+Shape determines how fast the distribution decays i.e. how quickly the quantiles get large. 
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}
+\frametitle{GEV$(0,1,\xi)$}
+Shapes: $\xi=-0.2$ (turquoise), $\xi=0$ (purple) and $\xi=0.2$ (orange)
+\begin{columns}[T]
+\begin{column}{0.5\textwidth}
+\vfill
+Densities 
+\begin{figure}
+\centering
+{\includegraphics[scale=0.3]{/home/eastoee/ShortCourses/GlaciologyExtremes/Plots/gev_density.pdf}}
+\end{figure}
+\vfill
+\end{column}
+\hfill
+\begin{column}{0.5\textwidth}
+Upper quantiles
+\begin{figure}
+\centering
+{\includegraphics[scale=0.3]{/home/eastoee/ShortCourses/GlaciologyExtremes/Plots/gev_quantile.pdf}}
+\end{figure}
+\end{column}
+\end{columns}
+\end{frame}
+
+\begin{frame}
+\frametitle{GEV as a statistical model}
+\begin{itemize}
+\item
+Useful to model any data set which is contains maxima or minima
+\item
+Condition: maxima/minima have been taken over a `large enough' number of underlying observations
+\begin{itemize}
+\item
+Fine to use for annual max/min of daily observations
+\item
+Not so good to use for daily max/min of hourly observations 
+\end{itemize}
+\item
+Estimation of parameters via any method of statistical inference
+\begin{itemize}
+\item 
+Maximum likelihood, Bayes, L-moments
+\item 
+All of these implemented in \textsf{R} package \texttt{extRemes}
+\end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{Return levels}
+\begin{itemize}
+\item
+For the GEV these are directly related to quantiles.
+\item
+Let $x_N$ be the $N$-year return level, then to find $x_N$ assuming a GEV model, solve
+\begin{eqnarray*}
+\Pr[X\leq x_N]=\exp\left\{-\left[1+\xi\left(\frac{x-\mu}{\sigma}\right)\right]^{-1/\xi}\right\}=1-\frac{1}{N}
+\end{eqnarray*}
+\item
+Gives
+\begin{eqnarray*}
+x_N=\frac{1}{\xi}\left\{\left[-\log(1-1/N)\right]^{-\xi}-1\right\}
+\end{eqnarray*}
+\item
+Again implemented in \texttt{extRemes}
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{Implementation in \textsf{R}}
+\begin{itemize}
+\item
+Quite a few packages including \texttt{extRemes}, \texttt{texmex}, \texttt{evd} and \texttt{ismev}
+\item
+For this course we will use \texttt{extRemes}
+\item
+Has a single function for fitting the various EVA models.
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{Kangerlussuaq again}
+\begin{itemize}
+\item
+Load the data into \textsf{R},
+\begin{verbatim}
+> annMaxKanger <- read.csv("kangerMax.csv")
+\end{verbatim}
+Data frame with two columns: \texttt{Year} and \texttt{Max}
+\item
+Fit the model
+\begin{verbatim}
+> max.fit.1 <- fevd(x=Max,data=annMaxKanger)
+\end{verbatim}
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]
+\begin{itemize}
+\item
+To obtain parameter estimates, standard errors etc 
+\begin{verbatim}
+> summary(max.fit.1)
+\end{verbatim}
+\item
+Important parts of the output
+\begin{verbatim}
+ Estimated parameters:
+  location      scale      shape 
+21.4478281  1.1863160 -0.1135755 
+
+ Standard Error Estimates:
+ location     scale     shape 
+0.2095874 0.1471525 0.1088952 
+
+ AIC = 140.7024 
+\end{verbatim}
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]
+Visual diagnostics of model fit:
+\begin{verbatim}
+> plot(max.fit.1)
+\end{verbatim}
+\begin{figure}
+\centering
+{\includegraphics[scale=0.3]{/home/eastoee/ShortCourses/GlaciologyExtremes/Plots/kanger_gev_plot.pdf}}
+\end{figure}
+\end{frame}
+
+\begin{frame}[fragile]
+Estimate return levels using
+\begin{verbatim}
+> rl <- return.level(max.fit.1,return.period=seq(5,500,by=5))
+\end{verbatim}
+and to plot
+\begin{verbatim}
+> plot(max.fit.1,type="rl")
+\end{verbatim}
+
+%\begin{columns}[T]
+%\begin{column}{0.5\textwidth}
+%Return period on original scale
+%\vfill
+%\begin{figure}
+%\centering
+%{\includegraphics[scale=0.3]{/home/eastoee/ShortCourses/GlaciologyExtremes/Plots/kanger_gev_rl.pdf}}
+%\end{figure}
+%\end{column}
+%\begin{column}{0.5\textwidth}
+%Return period on log scale
+%\vfill
+\begin{figure}
+\centering
+{\includegraphics[scale=0.3]{/home/eastoee/ShortCourses/GlaciologyExtremes/Plots/kanger_gev_rl.pdf}}
+\end{figure}
+%\end{column}
+%\end{columns}
+\end{frame}
+
+\subsection{Regression-type models}
+
+\begin{frame}
+\frametitle{Regression modelling}
+Model discussed above assumes data are stationary over time. It is more likely that either (or both):
+\begin{itemize}
+\item
+There is a trend in the maxima over time (climate change?)
+\item
+One or more physical variables could be used to help explain changes in the maxima
+\end{itemize}
+Model this using regression-type techniques.
+\end{frame}
+
+\begin{frame}
+\begin{itemize}
+\item
+Write location and/or scale parameter as linear functions of covariate(s) e.g.
+\begin{eqnarray*}
+\mu(\mathrm{time})&=&\mu_0+\mu_1\mathrm{time}\\
+\log\sigma(\mathrm{time})&=&\sigma_0+\sigma_1\mathrm{time}
+\end{eqnarray*}
+\item
+`log-link' for scale to ensure $\sigma(\mathrm{time})>0$ for all time
+\item
+In general, keep shape $\xi$ constant
+\item
+More unknown parameters to estimate!
+\item
+Compare models using likelihood ratio test or AIC to only include significant covariate(s)
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{Regression models in \textsf{R}}
+\begin{verbatim}
+> annMaxKanger$Time <- annMaxKanger$Year-1974
+> max.fit.2 <- 
+      fevd(x=Max,data=annMaxKanger,location.fun=~1+Time)
+> summary(max.fit.2)
+\end{verbatim}
+
+The fitted model is 
+\begin{eqnarray*}
+\mu(\mathrm{year})&=&20.4+0.049\times(\mathrm{year}-1974)\\
+\sigma&=&0.99\\
+\xi&=&0.0056
+\end{eqnarray*}
+The standard error for the `year' coefficient is 0.015.
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{Model selection}
+\begin{itemize}
+\item
+If models are nested, use the likelihood ratio test
+\item
+Enter the simpler model first, in this case \texttt{max.fit.1}
+\end{itemize}
+Using the \texttt{extRemes} package:
+
+\begin{verbatim}
+> lr.test(max.fit.1,max.fit.2)
+\end{verbatim}
+
+The output looks like this:
+\begin{verbatim}
+Likelihood-ratio Test
+
+data:  MaxMax
+Likelihood-ratio = 8.5274, chi-square critical value = 3.8415, alpha =
+0.0500, Degrees of Freedom = 1.0000, p-value = 0.003498
+alternative hypothesis: greater
+\end{verbatim}
+$p=0.0035<0.05$ therefore there is evidence of a time trend in the location parameter
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{Effective return levels}
+These are $N$-year return levels for each value of the covariate 
+\begin{verbatim}
+> plot(max.fit.2,type="rl")
+\end{verbatim}
+\begin{figure}
+\centering
+{\includegraphics[scale=0.3]{/home/eastoee/ShortCourses/GlaciologyExtremes/Plots/kanger_effective_rl.pdf}}
+\end{figure}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{Peaks over Threshold}
+
+\begin{frame}
+\frametitle{Peaks over Threshold (PoT)}
+\begin{itemize}
+\item
+Alternative to modelling only maxima/minima
+\item
+Allows us to model all unusually large (or small) events
+\item
+Requires identification of these events
+\item
+But a more efficient use of the data than just taking maxima/minima
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{Overview of PoT approach}
+\begin{itemize}
+\item
+Choose a high threshold: any observation above this is classified as an extreme event
+\item
+Model
+\begin{itemize}
+\item
+Rate - how often do they occur?
+\item
+Size - how large are they?
+\end{itemize}
+of threshold exceedances.
+\end{itemize}
+Note on threshold identification: visual aids exist to help with this e.g. mean residual life plot.
+\end{frame}
+
+\subsection{The generalised Pareto (GP) distribution}
+
+\begin{frame}
+\frametitle{Generalised Pareto distribution}
+\begin{itemize}
+\item
+The generalised Pareto (GP) distribution is used to model the size of threshold exceedances
+\item
+The full cumulative distribution function for an exceedance is given by 
+\begin{eqnarray*}
+\Pr[X\leq x]=1-\phi\left[1+\xi\left(\frac{x-u}{\psi}\right)\right]^{-1/\xi}
+\end{eqnarray*}
+\item
+Three unknown parameters: rate $\phi\in [0,1]$, scale $\psi\in(0,\infty)$ and shape $\xi$
+\item
+As with GEV, parameter estimation by likelihood, Bayesian, L-moments,...
+\item
+Relies on threshold being very high
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{Kangerlussuaq: daily maxima temperatures}
+Choose the 90\% quantile as a threshold (purple line)
+\begin{figure}
+\centering
+{\includegraphics[scale=0.3]{/home/eastoee/ShortCourses/GlaciologyExtremes/Plots/kanger_threshold_zoom.pdf}}
+\end{figure}
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{Implementation of GP in \textsf{R}}
+Can use the same \texttt{fevd} function to fit the GP model as we used for the GEV model:
+\begin{verbatim}
+> kanger <- read.csv("kangerTemp.csv")
+> thresh <- quantile(kanger$Temp,0.9) #define threshold
+> gp.fit.1 <- fevd(x=Temperature,data=kanger,threshold=thresh,type="GP")
+> summary(gp.fit.1)
+\end{verbatim}
+From the last command we see that $\hat\psi=2.28$ and $\hat\xi=-0.27$. To find $\hat\phi$,
+\begin{verbatim}
+> gp.fit.1$rate
+\end{verbatim}
+and $\hat\phi=0.098$ (why is this not surprising?!)
+\end{frame}
+
+\begin{frame}[fragile]
+As for the GEV model, use visual diagnostics to check model fit,
+\begin{verbatim}
+> plot(gp.fit.1)
+\end{verbatim}
+\begin{figure}
+\centering
+{\includegraphics[scale=0.3]{/home/eastoee/ShortCourses/GlaciologyExtremes/Plots/kanger_gp_diag.pdf}}
+\end{figure}
+\end{frame}
+
+\begin{frame}[fragile]
+And return levels for the daily temperature (not the annual maxima now):
+\begin{verbatim}
+> plot(gp.fit.1,type="rl")
+\end{verbatim}
+\begin{figure}
+\centering
+{\includegraphics[scale=0.3]{/home/eastoee/ShortCourses/GlaciologyExtremes/Plots/kanger_gp_rl.pdf}}
+\end{figure}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection{Cluster identification}
+
+\begin{frame}
+\frametitle{Modelling event maxima only}
+\begin{itemize}
+\item
+The diagnostics and return level plot suggest that the model could do better at describing the highest temperatures
+\item
+Model could be too simplistic
+\item
+Perhaps behaviour changes over time
+\item
+Or extremes are not independent
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{Event identification}
+\begin{itemize}
+\item
+So far have thought of each threshold exceedance as a separate event
+\item
+What if exceedances occur in groups (clusters)?
+\item
+Can model cluster {\it maxima} using the GP model
+\item
+Need a way to identify clusters: number of algorithms
+\item
+Use the {\it runs method}: Exceedances separated by 
+\begin{itemize}
+\item
+fewer than $r$ consecutive non-exceedances belong to same cluster;
+\item
+more than $r$ consecutive non-exceedances belong to independent clusters.
+\end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{Cluster Identification in \textsf{R}}
+Use the \texttt{decluster} function:
+\begin{verbatim}
+> kangerDecl <- decluster(kanger$Temperature,threshold=thresh
+     ,method="runs",r=3)
+\end{verbatim}
+To get a summary of the declustering
+\begin{verbatim}
+> print(kangerDecl)
+\end{verbatim}
+
+\begin{itemize}
+\item
+Shows 223 clusters. 
+\item
+Should assess sensitivity to choice of different run lengths.
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{Extremal Index}
+\subsection{Extremal Index}
+\begin{block}{Extremal Index}
+Often denoted $\theta$ is a measure of the strength of extremal dependence. 
+\begin{itemize}
+\item
+Lies in the interval $[0,1]$. 
+\item
+Stronger dependence as $\theta$ gets closer to 0.
+\item
+Mean cluster size is reciprocal of extremal index.
+\item
+Independent series have $\theta=1$ but $\theta=1$ does not imply that the series is independent, merely that the threshold exceedances are independent. 
+\end{itemize}
+\end{block}
+\end{frame}
+
+\begin{frame}[fragile]
+\begin{itemize}
+\item
+The extremal index can be estimated using the runs or intervals method. 
+\item
+\texttt{decluster} and \texttt{decluster.runs} in \texttt{extRemes} automatically output the intervals estimate even if the runs method is specified. 
+\item
+Instead use \texttt{extremalindex} function:
+\begin{verbatim}
+> extremalindex(kanger$Temperature,threshold=thresh
+     ,method="runs",run.length=3)
+\end{verbatim}
+\item
+Gives $\hat\theta=0.158$, with a mean cluster size of $1/0.158 =6.3$.
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]
+Can look at the clusters using 
+\begin{verbatim}
+> plot(kangerDecl)
+\end{verbatim}
+\begin{figure}
+\centering
+{\includegraphics[scale=0.3]{/home/eastoee/ShortCourses/GlaciologyExtremes/Plots/kanger_decl.pdf}}
+\end{figure}
+\end{frame}
+
+\begin{frame}[fragile]
+Refit GP to cluster maxima only, and check diagnostics.
+\begin{verbatim}
+> gp.fit.2 <- fevd(x=kangerDecl,threshold=thresh,type="GP")
+> plot(gp.fit.2)
+\end{verbatim}
+For cluster max only $\hat\psi=0.24$ and $\hat\xi=0.040$. Diagnostics much better!
+\begin{figure}
+\centering
+{\includegraphics[scale=0.3]{/home/eastoee/ShortCourses/GlaciologyExtremes/Plots/kanger_decl_gp.pdf}}
+\end{figure}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{Summary}
+
+\begin{frame}
+\frametitle{Summary}
+\begin{itemize}
+\item
+Two main EVA models: Generalised Extreme Value (GEV) and generalised Pareto (GP) distributions
+\item
+GEV appropriate for annual maxima or minima data
+\item
+GP used to model threshold exceedances in PoT approach
+\item
+Can extend both models to include regression terms
+\item
+For PoT approach might want to check for clustering and model only cluster maxima
+\item
+Return levels can be easily produced for both GEV and GP models; if regression terms are included then effective return levels will be produced
+\end{itemize}
+\end{frame}
+
+\subsection{Further topics}
+
+\begin{frame}
+\frametitle{Further areas of interest}
+\begin{itemize}
+\item
+Including regression terms in the GP model
+\item
+Statistical downscaling of extremes
+\item
+Spatial modelling of extreme events; Gaussian process based models not necessarily appropriate
+\item
+Multivariate modelling of extremes: joint extremal behaviour of e.g. two variables at a single location, the same variable at two locations,...
+\end{itemize}
+\end{frame}
+
+\end{document}
